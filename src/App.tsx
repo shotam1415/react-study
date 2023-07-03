@@ -14,16 +14,47 @@ const getParam = ()=>{
   console.log('textパラメータが変更されました:', textParam);
 }
 
-const handleTextParameter = ()=>{
-  const urlParams = new URLSearchParams(window.location.search);
-  const textParam = urlParams.get('text');
+
+const handleTextParameter = (...intervalID:any)=>{
   const textElement = window.document.getElementById('js-text');
   if(textElement){
+    const urlParams = new URLSearchParams(window.location.search);
+    const textParam = urlParams.get('text');
+    console.log('complete');
+    console.log(document.readyState)
+    console.log(document.getElementById('js-text'))
     textElement.innerText = String(textParam)
   }
-  
 }
 
+const displayTextFromParameter = ()=>{
+  const textElement = window.document.getElementById('js-text');
+  const intervalID = setInterval(()=>{
+    if(!textElement){
+      clearInterval(intervalID)
+      handleTextParameter()
+      // const urlParams = new URLSearchParams(window.location.search);
+      // const textParam = urlParams.get('text');
+      
+      // const textElement = window.document.getElementById('js-text');
+      // const textInputElement = window.document.getElementById('js-textInput') as HTMLInputElement;;
+
+
+      // if(textElement && textInputElement){
+      //   textElement.innerText = String(textParam)
+      //   textInputElement.value = String(textParam)
+      // }
+      
+    }
+  },1000)
+}
+
+window.addEventListener('load',()=>{
+  displayTextFromParameter()
+});
+// window.document.addEventListener('readystatechange', (event) => {
+//   handleTextParameter()
+// });
 
 function App() {
   return (
@@ -31,7 +62,7 @@ function App() {
       <div>
         <div className="text">
           <label className="text__label">テキスト入力</label>
-          <input className="text__input" type={'text'} onChange={(e)=>{changeQueryParam(e)}}/>
+          <input id="js-inputText" className="text__input" type={'text'} onChange={(e)=>{changeQueryParam(e)}}/>
         </div>
         <div>
             <p id="js-text"></p>
@@ -42,3 +73,4 @@ function App() {
 }
 
 export default App;
+
