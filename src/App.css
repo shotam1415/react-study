@@ -1,0 +1,18 @@
+.App{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.text{
+  text-align: center;
+}
+
+.text .text__label{
+  display: block;
+}
+
+.text .text__input{
+  display: block;
+}
