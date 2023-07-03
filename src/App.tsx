@@ -5,6 +5,14 @@ const changeQueryParam = (e:any)=>{
   const textValue = e.target.value;
   // window.location.replace(`/?text=${textValue}`) ;
   window.history.pushState({}, '', `/?text=${textValue}`);
+  getParam()
+}
+
+
+const getParam = ()=>{
+  const urlParams = new URLSearchParams(window.location.search);
+  const textParam = urlParams.get('text');
+  console.log('textパラメータが変更されました:', textParam);
 }
 
 function App() {
