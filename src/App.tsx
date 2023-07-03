@@ -1,7 +1,7 @@
 import "./App.css";
 
 
-const changeQueryParam = (e:any)=>{
+const changeQueryParam = (e:React.ChangeEvent<HTMLInputElement>)=>{
   const textValue = e.target.value;
   // window.location.replace(`/?text=${textValue}`) ;
   window.history.pushState({}, '', `/?text=${textValue}`);
