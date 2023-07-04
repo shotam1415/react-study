@@ -1,9 +1,14 @@
 import "./App.css";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 
 
 function App() {
   const [isText,setText] = useState('')
+
+  //リロード時にパラメータをStateに格納する。
+  useEffect(()=>{
+    setIsText()
+  },[])
   
   const changeQueryParam = (e:React.ChangeEvent<HTMLInputElement>)=>{
     const textValue = e.target.value;
