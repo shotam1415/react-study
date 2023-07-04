@@ -1,7 +1,6 @@
 import "./App.css";
 import { useState,useEffect } from "react";
 
-
 function App() {
   const [isText,setText] = useState('')
 
@@ -10,6 +9,7 @@ function App() {
     setIsText()
   },[])
   
+  //入力した値をパラメータに入れる
   const changeQueryParam = (e:React.ChangeEvent<HTMLInputElement>)=>{
     const textValue = e.target.value;
     window.history.pushState({}, '', `/?text=${textValue}`);
