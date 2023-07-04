@@ -4,27 +4,19 @@ import { useState } from "react";
 
 function App() {
   const [isText,setText] = useState('')
-
-  const getParam = ()=>{
-    const urlParams = new URLSearchParams(window.location.search);
-    const textParam = urlParams.get('text');
-    console.log('textパラメータが変更されました:', textParam);
-  }
   
   const changeQueryParam = (e:React.ChangeEvent<HTMLInputElement>)=>{
     const textValue = e.target.value;
     window.history.pushState({}, '', `/?text=${textValue}`);
-    getParam()
-    handleTextParameter()
+    setIsText()
   }
 
-  const handleTextParameter = ()=>{
+  const setIsText = ()=>{
       const urlParams = new URLSearchParams(window.location.search);
       const textParam = urlParams.get('text') ? urlParams.get('text'):"";
       if(textParam !== null){
         setText(textParam)
       }
-    
   }
 
   return (
