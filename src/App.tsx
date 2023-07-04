@@ -24,6 +24,10 @@ function App() {
       }
   }
 
+  const doReload = ()=>{
+    window.location.reload();
+  }
+
   return (
     <div className="App">
       <div>
@@ -32,8 +36,10 @@ function App() {
           <input className="text__input" type={'text'} value={isText} onChange={(e)=>{changeQueryParam(e)}}/>
         </div>
         <div>
+            <p>パラメータの内容が表示されます。</p>
             <p>{isText}</p>
         </div>
+        <button type="button" onClick={()=>doReload()}>更新する</button>
       </div>
     </div>
   );
