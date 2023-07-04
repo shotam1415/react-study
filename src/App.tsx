@@ -29,7 +29,7 @@ function App() {
       <div>
         <div className="text">
           <label className="text__label">テキスト入力</label>
-          <input id="js-inputText" className="text__input" type={'text'} onChange={(e)=>{changeQueryParam(e)}}/>
+          <input className="text__input" type={'text'} value={isText} onChange={(e)=>{changeQueryParam(e)}}/>
         </div>
         <div>
             <p>{isText}</p>
