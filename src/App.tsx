@@ -2,36 +2,58 @@ import "./App.css";
 import { useState, useEffect } from "react";
 
 function App() {
-    const [firstNameState, setFirstNameState] = useState("");
-    const [lastNameState, setLastNameState] = useState("");
+    type Name = {
+        firstName :string,
+        lastName: string
+    }
+    const nameStateInitialData:Name = {
+        firstName:"",
+        lastName:"",
+    }
+    const [NameState,setNameState] = useState<Name>(nameStateInitialData)
 
     //リロード時にパラメータをStateに格納する。
     useEffect(() => {
         setTextStateAction();
     }, []);
 
-    //入力した値をパラメータに入れる
-    const changeQueryParam = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //URLパラメータとuseStateの更新
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const targetInputName = e.target.name;
         const targetInputValue = e.target.value;
         if (targetInputName === "firstName") {
-            window.history.pushState({}, "", `/?firstName=${targetInputValue}&lastName=${lastNameState}`);
-            setFirstNameState(targetInputValue);
+            const nextQueryParams = {
+                firstName: targetInputValue,
+                lastName: NameState.lastName
+            }
+            changeQueryParam(nextQueryParams)
+            setNameState(nextQueryParams)
         }
         if (targetInputName === "lastName") {
-            window.history.pushState({}, "", `/?firstName=${firstNameState}&lastName=${targetInputValue}`);
-            setLastNameState(targetInputValue);
+            const nextQueryParams = {
+                firstName: NameState.firstName,
+                lastName: targetInputValue
+            }
+            changeQueryParam(nextQueryParams)
+            setNameState(nextQueryParams)
         }
     };
+
+    const changeQueryParam = (param:Name)=>{
+        const urlSearchParam =  new URLSearchParams(param).toString();
+        window.history.pushState({}, "", `/?`+urlSearchParam);     
+    }
 
     const setTextStateAction = () => {
         const urlParams = new URLSearchParams(window.location.search);
         const firstNameParam = urlParams.get("firstName") ? urlParams.get("firstName") : "";
         const lastNameParam = urlParams.get("lastName") ? urlParams.get("lastName") : "";
-        if (firstNameParam !== null && lastNameParam) {
-            setFirstNameState(firstNameParam);
-            setLastNameState(lastNameParam);
+
+        const QueryParams = {
+            firstName: firstNameParam ? firstNameParam:"",
+            lastName: lastNameParam ? lastNameParam:""
         }
+        setNameState(QueryParams)
     };
 
     const doReload = () => {
@@ -49,9 +71,9 @@ function App() {
                                 className="border"
                                 name="firstName"
                                 type={"text"}
-                                value={firstNameState}
+                                value={NameState.firstName}
                                 onChange={(e) => {
-                                    changeQueryParam(e);
+                                    handleInputChange(e);
                                 }}
                             />
                         </div>
@@ -61,18 +83,15 @@ function App() {
                                 className="border"
                                 name="lastName"
                                 type={"text"}
-                                value={lastNameState}
+                                value={NameState.lastName}
                                 onChange={(e) => {
-                                    changeQueryParam(e);
+                                    handleInputChange(e);
                                 }}
                             />
                         </div>
                     </div>
                     <div className="mb-4">
-                        <p>
-                            私の名前は{firstNameState}
-                            {lastNameState}です
-                        </p>
+                                <p>私の名前は{NameState.firstName+NameState.lastName}です</p>
                     </div>
                     <button type="button" className="border p-2" onClick={() => doReload()}>
                         更新する
