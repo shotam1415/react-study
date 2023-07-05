@@ -1,49 +1,85 @@
 import "./App.css";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 
 function App() {
-  const [isText,setText] = useState('')
+  const [firstNameState, setFirstNameState] = useState("");
+  const [lastNameState, setLastNameState] = useState("");
 
   //リロード時にパラメータをStateに格納する。
-  useEffect(()=>{
-    setIsText()
-  },[])
-  
+  useEffect(() => {
+    setTextStateAction();
+  }, []);
+
   //入力した値をパラメータに入れる
-  const changeQueryParam = (e:React.ChangeEvent<HTMLInputElement>)=>{
-    const textValue = e.target.value;
-    window.history.pushState({}, '', `/?text=${textValue}`);
-    setIsText()
-  }
+  const changeQueryParam = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const targetInputName = e.target.name;
+    const targetInputValue = e.target.value;
+    if (targetInputName === "firstName") {
+      window.history.pushState({}, "", `/?firstName=${targetInputValue}&lastName=${lastNameState}`);
+      setFirstNameState(targetInputValue);
+    }
+    if (targetInputName === "lastName") {
+      window.history.pushState({}, "", `/?firstName=${firstNameState}&lastName=${targetInputValue}`);
+      setLastNameState(targetInputValue);
+    }
+  };
 
-  const setIsText = ()=>{
-      const urlParams = new URLSearchParams(window.location.search);
-      const textParam = urlParams.get('text') ? urlParams.get('text'):"";
-      if(textParam !== null){
-        setText(textParam)
-      }
-  }
+  const setTextStateAction = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const firstNameParam = urlParams.get("firstName") ? urlParams.get("firstName") : "";
+    const lastNameParam = urlParams.get("lastName") ? urlParams.get("lastName") : "";
+    if (firstNameParam !== null && lastNameParam) {
+      setFirstNameState(firstNameParam);
+      setLastNameState(lastNameParam);
+    }
+  };
 
-  const doReload = ()=>{
+  const doReload = () => {
     window.location.reload();
-  }
+  };
 
   return (
     <div className="App">
       <div>
-        <div className="text">
-          <label className="text__label">テキスト入力</label>
-          <input className="text__input" type={'text'} value={isText} onChange={(e)=>{changeQueryParam(e)}}/>
-        </div>
         <div>
-            <p>パラメータの内容が表示されます。</p>
-            <p>{isText}</p>
+          <p>一つずつ文字列で呼び出した例</p>
+          <div className="text">
+            <label className="text__label">姓</label>
+            <input
+              className="text__input"
+              name="firstName"
+              type={"text"}
+              value={firstNameState}
+              onChange={(e) => {
+                changeQueryParam(e);
+              }}
+            />
+          </div>
+          <div className="text">
+            <label className="text__label">名</label>
+            <input
+              className="text__input"
+              name="lastName"
+              type={"text"}
+              value={lastNameState}
+              onChange={(e) => {
+                changeQueryParam(e);
+              }}
+            />
+          </div>
+          <div>
+            <p>
+              私の名前は{firstNameState}
+              {lastNameState}です
+            </p>
+          </div>
+          <button type="button" onClick={() => doReload()}>
+            更新する
+          </button>
         </div>
-        <button type="button" onClick={()=>doReload()}>更新する</button>
       </div>
     </div>
   );
 }
 
 export default App;
-
