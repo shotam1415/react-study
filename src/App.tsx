@@ -15,12 +15,21 @@ function App() {
         const targetInputName = e.target.name;
         const targetInputValue = e.target.value;
         if (targetInputName === "firstName") {
-            window.history.pushState({}, "", `/?firstName=${targetInputValue}&lastName=${lastNameState}`);
+            const params = {
+                firstName: targetInputValue,
+                lastName: lastNameState
+            }
+            const urlSearchParam =  new URLSearchParams(params).toString();
+            window.history.pushState({}, "", `/?`+urlSearchParam);
             setFirstNameState(targetInputValue);
         }
         if (targetInputName === "lastName") {
-            window.history.pushState({}, "", `/?firstName=${firstNameState}&lastName=${targetInputValue}`);
-            setLastNameState(targetInputValue);
+            const params = {
+                firstName: firstNameState,
+                lastName: targetInputValue
+            }
+            const urlSearchParam =  new URLSearchParams(params).toString();
+            window.history.pushState({}, "", `/?`+urlSearchParam);            setLastNameState(targetInputValue);
         }
     };
 
