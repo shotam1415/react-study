@@ -2,7 +2,7 @@ import "./App.css";
 import { useState,useEffect } from "react";
 
 function App() {
-  const [isText,setText] = useState('')
+  const [textState,setTextState] = useState('')
 
   //リロード時にパラメータをStateに格納する。
   useEffect(()=>{
@@ -20,7 +20,7 @@ function App() {
       const urlParams = new URLSearchParams(window.location.search);
       const textParam = urlParams.get('text') ? urlParams.get('text'):"";
       if(textParam !== null){
-        setText(textParam)
+        setTextState(textParam)
       }
   }
 
@@ -33,11 +33,11 @@ function App() {
       <div>
         <div className="text">
           <label className="text__label">テキスト入力</label>
-          <input className="text__input" type={'text'} value={isText} onChange={(e)=>{changeQueryParam(e)}}/>
+          <input className="text__input" type={'text'} value={textState} onChange={(e)=>{changeQueryParam(e)}}/>
         </div>
         <div>
             <p>パラメータの内容が表示されます。</p>
-            <p>{isText}</p>
+            <p>{textState}</p>
         </div>
         <button type="button" onClick={()=>doReload()}>更新する</button>
       </div>
