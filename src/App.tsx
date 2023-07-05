@@ -2,50 +2,62 @@ import "./App.css";
 import { useState, useEffect } from "react";
 
 function App() {
-    const [NameState,setNameState] = useState({
+
+    type Name = {
+        firstName :string,
+        lastName: string
+    }
+
+    const nameStateInitialData = {
         firstName:"",
         lastName:"",
-    })
+    }
+    
+    const [NameState,setNameState] = useState<Name>(nameStateInitialData)
 
     //リロード時にパラメータをStateに格納する。
     useEffect(() => {
         setTextStateAction();
     }, []);
 
-    //入力した値をパラメータに入れる
-    const changeQueryParam = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //URLパラメータとuseStateの更新
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const targetInputName = e.target.name;
         const targetInputValue = e.target.value;
         if (targetInputName === "firstName") {
-            const params = {
+
+            const nextQueryParams = {
                 firstName: targetInputValue,
                 lastName: NameState.lastName
             }
-            const urlSearchParam =  new URLSearchParams(params).toString();
-            window.history.pushState({}, "", `/?`+urlSearchParam);
-            setNameState(params)
+            changeQueryParam(nextQueryParams)
+            setNameState(nextQueryParams)
         }
         if (targetInputName === "lastName") {
-            const params = {
+            const nextQueryParams = {
                 firstName: NameState.firstName,
                 lastName: targetInputValue
             }
-            const urlSearchParam =  new URLSearchParams(params).toString();
-            window.history.pushState({}, "", `/?`+urlSearchParam);            
-            setNameState(params)
+            changeQueryParam(nextQueryParams)
+            setNameState(nextQueryParams)
         }
     };
+
+    const changeQueryParam = (param:Name)=>{
+        const urlSearchParam =  new URLSearchParams(param).toString();
+        window.history.pushState({}, "", `/?`+urlSearchParam);     
+    }
 
     const setTextStateAction = () => {
         const urlParams = new URLSearchParams(window.location.search);
         const firstNameParam = urlParams.get("firstName") ? urlParams.get("firstName") : "";
         const lastNameParam = urlParams.get("lastName") ? urlParams.get("lastName") : "";
+
         const params = {
             firstName: firstNameParam ? firstNameParam:"",
             lastName: lastNameParam ? lastNameParam:""
         }
-        const urlSearchParam =  new URLSearchParams(params).toString();
-        window.history.pushState({}, "", `/?`+urlSearchParam);
+        
         setNameState(params)
     };
 
@@ -66,7 +78,7 @@ function App() {
                                 type={"text"}
                                 value={NameState.firstName}
                                 onChange={(e) => {
-                                    changeQueryParam(e);
+                                    handleInputChange(e);
                                 }}
                             />
                         </div>
@@ -78,7 +90,7 @@ function App() {
                                 type={"text"}
                                 value={NameState.lastName}
                                 onChange={(e) => {
-                                    changeQueryParam(e);
+                                    handleInputChange(e);
                                 }}
                             />
                         </div>
