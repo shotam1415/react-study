@@ -2,8 +2,10 @@ import "./App.css";
 import { useState, useEffect } from "react";
 
 function App() {
-    const [firstNameState, setFirstNameState] = useState("");
-    const [lastNameState, setLastNameState] = useState("");
+    const [NameState,setNameState] = useState({
+        firstName:"",
+        lastName:"",
+    })
 
     //リロード時にパラメータをStateに格納する。
     useEffect(() => {
@@ -17,19 +19,20 @@ function App() {
         if (targetInputName === "firstName") {
             const params = {
                 firstName: targetInputValue,
-                lastName: lastNameState
+                lastName: NameState.lastName
             }
             const urlSearchParam =  new URLSearchParams(params).toString();
             window.history.pushState({}, "", `/?`+urlSearchParam);
-            setFirstNameState(targetInputValue);
+            setNameState(params)
         }
         if (targetInputName === "lastName") {
             const params = {
-                firstName: firstNameState,
+                firstName: NameState.firstName,
                 lastName: targetInputValue
             }
             const urlSearchParam =  new URLSearchParams(params).toString();
-            window.history.pushState({}, "", `/?`+urlSearchParam);            setLastNameState(targetInputValue);
+            window.history.pushState({}, "", `/?`+urlSearchParam);            
+            setNameState(params)
         }
     };
 
@@ -37,10 +40,13 @@ function App() {
         const urlParams = new URLSearchParams(window.location.search);
         const firstNameParam = urlParams.get("firstName") ? urlParams.get("firstName") : "";
         const lastNameParam = urlParams.get("lastName") ? urlParams.get("lastName") : "";
-        if (firstNameParam !== null && lastNameParam) {
-            setFirstNameState(firstNameParam);
-            setLastNameState(lastNameParam);
+        const params = {
+            firstName: firstNameParam ? firstNameParam:"",
+            lastName: lastNameParam ? lastNameParam:""
         }
+        const urlSearchParam =  new URLSearchParams(params).toString();
+        window.history.pushState({}, "", `/?`+urlSearchParam);
+        setNameState(params)
     };
 
     const doReload = () => {
@@ -58,7 +64,7 @@ function App() {
                                 className="border"
                                 name="firstName"
                                 type={"text"}
-                                value={firstNameState}
+                                value={NameState.firstName}
                                 onChange={(e) => {
                                     changeQueryParam(e);
                                 }}
@@ -70,7 +76,7 @@ function App() {
                                 className="border"
                                 name="lastName"
                                 type={"text"}
-                                value={lastNameState}
+                                value={NameState.lastName}
                                 onChange={(e) => {
                                     changeQueryParam(e);
                                 }}
@@ -78,10 +84,7 @@ function App() {
                         </div>
                     </div>
                     <div className="mb-4">
-                        <p>
-                            私の名前は{firstNameState}
-                            {lastNameState}です
-                        </p>
+                                <p>私の名前は{NameState.firstName+NameState.lastName}です</p>
                     </div>
                     <button type="button" className="border p-2" onClick={() => doReload()}>
                         更新する
