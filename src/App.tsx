@@ -2,17 +2,14 @@ import "./App.css";
 import { useState, useEffect } from "react";
 
 function App() {
-
     type Name = {
         firstName :string,
         lastName: string
     }
-
-    const nameStateInitialData = {
+    const nameStateInitialData:Name = {
         firstName:"",
         lastName:"",
     }
-    
     const [NameState,setNameState] = useState<Name>(nameStateInitialData)
 
     //リロード時にパラメータをStateに格納する。
@@ -25,7 +22,6 @@ function App() {
         const targetInputName = e.target.name;
         const targetInputValue = e.target.value;
         if (targetInputName === "firstName") {
-
             const nextQueryParams = {
                 firstName: targetInputValue,
                 lastName: NameState.lastName
@@ -53,12 +49,11 @@ function App() {
         const firstNameParam = urlParams.get("firstName") ? urlParams.get("firstName") : "";
         const lastNameParam = urlParams.get("lastName") ? urlParams.get("lastName") : "";
 
-        const params = {
+        const QueryParams = {
             firstName: firstNameParam ? firstNameParam:"",
             lastName: lastNameParam ? lastNameParam:""
         }
-        
-        setNameState(params)
+        setNameState(QueryParams)
     };
 
     const doReload = () => {
