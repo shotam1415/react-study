@@ -45,15 +45,10 @@ function App() {
     }
 
     const setTextStateAction = () => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const firstNameParam = urlParams.get("firstName") ? urlParams.get("firstName") : "";
-        const lastNameParam = urlParams.get("lastName") ? urlParams.get("lastName") : "";
-
-        const QueryParams = {
-            firstName: firstNameParam ? firstNameParam:"",
-            lastName: lastNameParam ? lastNameParam:""
-        }
-        setNameState(QueryParams)
+        const urlParams = window.location.search;
+        const urlQuery = new URLSearchParams(urlParams);
+        const urlQueryParams = Object.fromEntries(urlQuery) as Name;
+        setNameState(urlQueryParams)
     };
 
     const doReload = () => {
@@ -90,9 +85,11 @@ function App() {
                             />
                         </div>
                     </div>
+                    {NameState &&
                     <div className="mb-4">
                                 <p>私の名前は{NameState.firstName+NameState.lastName}です</p>
                     </div>
+                    }
                     <button type="button" className="border p-2" onClick={() => doReload()}>
                         更新する
                     </button>
