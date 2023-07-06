@@ -6,6 +6,7 @@ function App() {
     const profileInitialData: Profile = {
         firstName: "",
         lastName: "",
+        experiencedLanguages:""
     };
     //入力内容の状態管理
     const [profile, setProfile] = useState<Profile>(profileInitialData);
@@ -31,7 +32,8 @@ function App() {
 
         const nextQueryParams = {
             firstName: targetInputName === "firstName" ? targetInputValue: profile.firstName,
-            lastName: targetInputName === "lastName" ? targetInputValue : profile.lastName
+            lastName: targetInputName === "lastName" ? targetInputValue : profile.lastName,
+            experiencedLanguages:"",
         };
 
         changeQueryParam(nextQueryParams);
@@ -103,8 +105,8 @@ function App() {
                                             <label htmlFor="checkbox02">Vue.js/Nuxt.js</label>
                                         </div>
                                         <div className="flex items-center gap-1">
-                                            <input type="checkbox" id="checkbox02"></input>
-                                            <label htmlFor="checkbox02">TypeScript</label>
+                                            <input type="checkbox" id="checkbox03"></input>
+                                            <label htmlFor="checkbox03">TypeScript</label>
                                         </div>
                                     </div>
                                 </div>

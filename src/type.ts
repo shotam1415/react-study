@@ -1,4 +1,5 @@
 export type Profile = {
     firstName :string,
-    lastName: string
+    lastName: string,
+    experiencedLanguages:string
 }
