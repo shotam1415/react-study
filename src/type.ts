@@ -1,4 +1,4 @@
-export type Name = {
+export type Profile = {
     firstName :string,
     lastName: string
 }
