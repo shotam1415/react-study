@@ -46,19 +46,25 @@ function App() {
 
     const setTextStateAction = () => {
         const urlParams = window.location.search;
-        const urlQuery = new URLSearchParams(urlParams);
-        const urlQueryParams = Object.fromEntries(urlQuery) as Name;
-        setNameState(urlQueryParams)
+        if(urlParams){
+            const urlQuery = new URLSearchParams(urlParams);
+            const urlQueryParams = Object.fromEntries(urlQuery) as Name;
+            setNameState(urlQueryParams)
+        }
     };
 
     const doReload = () => {
         window.location.reload();
     };
 
+    const areAllPropertiesEmpty = (obj:Name)=>{
+        return Object.values(obj).every((value)=>{return value ===""})
+    }
+
     return (
         <div className="flex items-center justify-center h-screen">
             <div>
-                <div className="border p-10">
+                <div className="border p-10 mb-10">
                     <div className="mb-4">
                         <div className="mb-4">
                             <label className="block">姓</label>
@@ -85,16 +91,17 @@ function App() {
                             />
                         </div>
                     </div>
-                    {NameState &&
-                    <div className="mb-4">
-                                <p>私の名前は{NameState.firstName+NameState.lastName}です</p>
-                    </div>
+                    {!areAllPropertiesEmpty(NameState)&&
+                        <div className="mb-4">
+                            <p>私の名前は{NameState.firstName}{NameState.lastName}です</p>
+                        </div>
                     }
-                    <button type="button" className="border p-2" onClick={() => doReload()}>
-                        更新する
-                    </button>
                 </div>
+                <button type="button" className="border p-2 mx-auto block" onClick={() => doReload()}>
+                        更新する
+            </button>
             </div>
+
         </div>
     );
 }
