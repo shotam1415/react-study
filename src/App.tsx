@@ -1,14 +1,14 @@
 import "./App.css";
 import { useState, useEffect } from "react";
-import { Name } from "./type";
+import { Profile } from "./type";
 
 function App() {
-    const nameStateInitialData:Name = {
+    const profileInitialData:Profile = {
         firstName:"",
         lastName:"",
     }
     //入力内容の状態管理
-    const [NameState,setNameState] = useState<Name>(nameStateInitialData)
+    const [profile,setProfile] = useState<Profile>(profileInitialData)
 
     //リロード時にパラメータをStateに格納する。
     useEffect(() => {
@@ -19,8 +19,8 @@ function App() {
         const urlParams = window.location.search;
         if(urlParams){
             const urlQuery = new URLSearchParams(urlParams);
-            const urlQueryParams = Object.fromEntries(urlQuery) as Name;
-            setNameState(urlQueryParams)
+            const urlQueryParams = Object.fromEntries(urlQuery) as Profile;
+            setProfile(urlQueryParams)
         }
     };
 
@@ -31,30 +31,30 @@ function App() {
         if (targetInputName === "firstName") {
             const nextQueryParams = {
                 firstName: targetInputValue,
-                lastName: NameState.lastName
+                lastName: profile.lastName
             }
             changeQueryParam(nextQueryParams)
-            setNameState(nextQueryParams)
+            setProfile(nextQueryParams)
         }
         if (targetInputName === "lastName") {
             const nextQueryParams = {
-                firstName: NameState.firstName,
+                firstName: profile.firstName,
                 lastName: targetInputValue
             }
             changeQueryParam(nextQueryParams)
-            setNameState(nextQueryParams)
+            setProfile(nextQueryParams)
         }
     };
 
     //受け取ったパラメータをURLに反映
-    const changeQueryParam = (param:Name)=>{
+    const changeQueryParam = (param:Profile)=>{
         const urlSearchParam =  new URLSearchParams(param).toString();
         window.history.pushState({}, "", `/?`+urlSearchParam);     
     }
 
 
     //オブジェクトのプロパティの値の空判定
-    const areAllPropertiesEmpty = (obj:Name)=>{
+    const areAllPropertiesEmpty = (obj:Profile)=>{
         return Object.values(obj).every((value)=>{return value ===""})
     }
 
@@ -71,7 +71,7 @@ function App() {
                                 className="border block w-full"
                                 name="firstName"
                                 type={"text"}
-                                value={NameState.firstName}
+                                value={profile.firstName}
                                 onChange={(e) => {
                                     handleInputChange(e);
                                 }}
@@ -83,7 +83,7 @@ function App() {
                                 className="border block w-full"
                                 name="lastName"
                                 type={"text"}
-                                value={NameState.lastName}
+                                value={profile.lastName}
                                 onChange={(e) => {
                                     handleInputChange(e);
                                 }}
@@ -94,18 +94,18 @@ function App() {
                 </div>
                 <div className="w-3/6">
                     <h2 className="text-center mb-4 font-bold text-xl">プレビュー画面</h2>
-                    {!areAllPropertiesEmpty(NameState) && 
+                    {!areAllPropertiesEmpty(profile) && 
                     <div className="border p-10">
-                        {NameState.firstName &&
+                        {profile.firstName &&
                             <dd className="flex items-start gap-2 mb-4 last:mb-0">
                                 <dt>姓：</dt>
-                                <dl>{NameState.firstName}</dl>
+                                <dl>{profile.firstName}</dl>
                             </dd>
                         }
-                        {NameState.lastName &&
+                        {profile.lastName &&
                             <dd className="flex items-start gap-2 mb-4 last:mb-0">
                                 <dt>名：</dt>
-                                <dl>{NameState.lastName}</dl>
+                                <dl>{profile.lastName}</dl>
                             </dd>
                         }
                     </div>
