@@ -7,12 +7,22 @@ function App() {
         firstName:"",
         lastName:"",
     }
+    //入力内容の状態管理
     const [NameState,setNameState] = useState<Name>(nameStateInitialData)
 
     //リロード時にパラメータをStateに格納する。
     useEffect(() => {
         setTextStateAction();
     }, []);
+
+    const setTextStateAction = () => {
+        const urlParams = window.location.search;
+        if(urlParams){
+            const urlQuery = new URLSearchParams(urlParams);
+            const urlQueryParams = Object.fromEntries(urlQuery) as Name;
+            setNameState(urlQueryParams)
+        }
+    };
 
     //URLパラメータとuseStateの更新
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,27 +46,22 @@ function App() {
         }
     };
 
+    //受け取ったパラメータをURLに反映
     const changeQueryParam = (param:Name)=>{
         const urlSearchParam =  new URLSearchParams(param).toString();
         window.history.pushState({}, "", `/?`+urlSearchParam);     
     }
 
-    const setTextStateAction = () => {
-        const urlParams = window.location.search;
-        if(urlParams){
-            const urlQuery = new URLSearchParams(urlParams);
-            const urlQueryParams = Object.fromEntries(urlQuery) as Name;
-            setNameState(urlQueryParams)
-        }
-    };
 
-    const doReload = () => {
-        window.location.reload();
-    };
-
+    //オブジェクトのプロパティの値の空判定
     const areAllPropertiesEmpty = (obj:Name)=>{
         return Object.values(obj).every((value)=>{return value ===""})
     }
+
+    //動作確認用の更新ボタン
+    const doReload = () => {
+        window.location.reload();
+    };
 
     return (
         <div className="flex items-center justify-center h-screen">
@@ -98,7 +103,6 @@ function App() {
                         更新する
             </button>
             </div>
-
         </div>
     );
 }
