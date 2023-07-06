@@ -28,22 +28,14 @@ function App() {
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const targetInputName = e.target.name;
         const targetInputValue = e.target.value;
-        if (targetInputName === "firstName") {
-            const nextQueryParams = {
-                firstName: targetInputValue,
-                lastName: profile.lastName,
-            };
-            changeQueryParam(nextQueryParams);
-            setProfile(nextQueryParams);
-        }
-        if (targetInputName === "lastName") {
-            const nextQueryParams = {
-                firstName: profile.firstName,
-                lastName: targetInputValue,
-            };
-            changeQueryParam(nextQueryParams);
-            setProfile(nextQueryParams);
-        }
+
+        const nextQueryParams = {
+            firstName: targetInputName === "firstName" ? targetInputValue: profile.firstName,
+            lastName: targetInputName === "lastName" ? targetInputValue : profile.lastName
+        };
+        
+        changeQueryParam(nextQueryParams);
+        setProfile(nextQueryParams);
     };
 
     //受け取ったパラメータをURLに反映
