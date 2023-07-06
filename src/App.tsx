@@ -58,11 +58,6 @@ function App() {
         return Object.values(obj).every((value)=>{return value ===""})
     }
 
-    //動作確認用の更新ボタン
-    const doReload = () => {
-        window.location.reload();
-    };
-
     return (
         <div className="flex items-center justify-center h-screen">
             <div>
@@ -99,9 +94,6 @@ function App() {
                         </div>
                     }
                 </div>
-                <button type="button" className="border p-2 mx-auto block" onClick={() => doReload()}>
-                        更新する
-            </button>
             </div>
         </div>
     );
