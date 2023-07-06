@@ -1,11 +1,8 @@
 import "./App.css";
 import { useState, useEffect } from "react";
+import { Name } from "./type";
 
 function App() {
-    type Name = {
-        firstName :string,
-        lastName: string
-    }
     const nameStateInitialData:Name = {
         firstName:"",
         lastName:"",
