@@ -3,37 +3,45 @@ import { useState, useEffect } from "react";
 import { Profile } from "./type";
 
 function App() {
-    const profileInitialData: Profile = {
+    const profileInitialData: any = {
         firstName: "",
         lastName: "",
-        experiencedLanguages:""
+        experiencedLanguages:[]
     };
     //入力内容の状態管理
-    const [profile, setProfile] = useState<Profile>(profileInitialData);
+    const [profile, setProfile] = useState<any>(profileInitialData);
 
     //リロード時にパラメータをStateに格納する。
     useEffect(() => {
-        setTextStateAction();
+        // setTextStateAction();
     }, []);
+
+    useEffect(()=>{
+        console.log(profile)
+    },[profile])
 
     const setTextStateAction = () => {
         const urlParams = window.location.search;
         if (urlParams) {
             const urlQuery = new URLSearchParams(urlParams);
-            const urlQueryParams = Object.fromEntries(urlQuery) as Profile;
+            const urlQueryParams = Object.fromEntries(urlQuery) as any;
             setProfile(urlQueryParams);
         }
     };
 
     //URLパラメータとuseStateの更新
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        console.log(e.target)
         const targetInputName = e.target.name;
         const targetInputValue = e.target.value;
+
+        console.log(targetInputName)
+        console.log(targetInputValue)
 
         const nextQueryParams = {
             firstName: targetInputName === "firstName" ? targetInputValue: profile.firstName,
             lastName: targetInputName === "lastName" ? targetInputValue : profile.lastName,
-            experiencedLanguages:"",
+            experiencedLanguages: targetInputName ==="experiencedLanguages" ? updateCheckbox(targetInputValue): profile.experiencedLanguages
         };
 
         changeQueryParam(nextQueryParams);
@@ -41,17 +49,37 @@ function App() {
     };
 
     //受け取ったパラメータをURLに反映
-    const changeQueryParam = (param: Profile) => {
+    const changeQueryParam = (param: any) => {
         const urlSearchParam = new URLSearchParams(param);
         window.history.pushState({}, "", `/?` + urlSearchParam);
     };
 
     //オブジェクトのプロパティの値の空判定
-    const areAllPropertiesEmpty = (obj: Profile) => {
+    const areAllPropertiesEmpty = (obj: any) => {
         return Object.values(obj).every((value) => {
             return value === "";
         });
     };
+
+    const updateCheckbox = (value:string)=>{
+        console.log(profile)
+        //重複した値があるかどうか判定
+        if(!profile.experiencedLanguages.filter((item:string)=>(item === value)).length){
+            const setValues = [...profile.experiencedLanguages, value]
+            //値を追加
+            setProfile((state:any) => ({
+                ...state,
+                experiencedLanguages: setValues
+              }))
+        }else{
+            const setValues = profile.experiencedLanguages.filter((item:string) => (item !== value))
+            //値を削除
+            setProfile((state:any) => ({
+                ...state,
+                experiencedLanguages: setValues
+              }))
+        }
+    }
 
     return (
         <main>
@@ -97,15 +125,15 @@ function App() {
                                     <label className="mb-1 block">経験が多い言語/フレームワーク</label>
                                     <div className="flex flex-wrap items-start gap-2">
                                         <div className="flex items-center gap-1">
-                                            <input type="checkbox" id="checkbox01"></input>
+                                            <input type="checkbox" id="checkbox01" onChange={(e)=>{updateCheckbox(e.target.value)}} name="experiencedLanguages" value="React/Next.js"></input>
                                             <label htmlFor="checkbox01">React/Next.js</label>
                                         </div>
                                         <div className="flex items-center gap-1">
-                                            <input type="checkbox" id="checkbox02"></input>
+                                            <input type="checkbox" id="checkbox02" onChange={(e)=>{updateCheckbox(e.target.value)}} name="experiencedLanguages" value="Vue.js/Nuxt.js"></input>
                                             <label htmlFor="checkbox02">Vue.js/Nuxt.js</label>
                                         </div>
                                         <div className="flex items-center gap-1">
-                                            <input type="checkbox" id="checkbox03"></input>
+                                            <input type="checkbox" id="checkbox03" onChange={(e)=>{updateCheckbox(e.target.value)}} name="experiencedLanguages" value="TypeScript"></input>
                                             <label htmlFor="checkbox03">TypeScript</label>
                                         </div>
                                     </div>
