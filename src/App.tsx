@@ -3,17 +3,17 @@ import { useState, useEffect } from "react";
 import { Profile } from "./type";
 
 function App() {
-    const profileInitialData: any = {
+    const profileInitialData: Profile = {
         firstName: "",
         lastName: "",
         experiencedLanguages:[]
     };
     //入力内容の状態管理
-    const [profile, setProfile] = useState<any>(profileInitialData);
+    const [profile, setProfile] = useState<Profile>(profileInitialData);
 
     //リロード時にパラメータをStateに格納する。
     useEffect(() => {
-        // setTextStateAction();
+        setTextStateAction();
     }, []);
 
     useEffect(()=>{
@@ -24,28 +24,38 @@ function App() {
         const urlParams = window.location.search;
         if (urlParams) {
             const urlQuery = new URLSearchParams(urlParams);
-            const urlQueryParams = Object.fromEntries(urlQuery) as any;
-            setProfile(urlQueryParams);
+            
+            const firstName = urlQuery.get('firstName') ? urlQuery.get('firstName'):"";
+            const lastName = urlQuery.get('lastName')? urlQuery.get('lastName'):"";
+            const experiencedLanguages = urlQuery.get('experiencedLanguages') ?  urlQuery.get('experiencedLanguages'):"";
+
+            const urlParam = {
+                firstName:firstName !==null ? firstName :"",
+                lastName:lastName !==null ? lastName :"",
+                experiencedLanguages:experiencedLanguages?.split(',')
+            }
+            setProfile(urlParam);
         }
     };
 
     //URLパラメータとuseStateの更新
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target)
         const targetInputName = e.target.name;
         const targetInputValue = e.target.value;
-
-        console.log(targetInputName)
-        console.log(targetInputValue)
-
+        
+        //URLパラメータに格納するオブジェクト作成
         const nextQueryParams = {
-            firstName: targetInputName === "firstName" ? targetInputValue: profile.firstName,
-            lastName: targetInputName === "lastName" ? targetInputValue : profile.lastName,
-            experiencedLanguages: targetInputName ==="experiencedLanguages" ? updateCheckbox(targetInputValue): profile.experiencedLanguages
+                firstName: targetInputName === "firstName" ? targetInputValue: profile.firstName,
+                lastName: targetInputName === "lastName" ? targetInputValue : profile.lastName,
+                experiencedLanguages: targetInputName === "experiencedLanguages" ? updateExperiencedLanguages(targetInputValue): profile.experiencedLanguages
         };
-
+        //クエリにデータを格納
         changeQueryParam(nextQueryParams);
-        setProfile(nextQueryParams);
+
+        //setStateを更新
+        if(targetInputName !== "experiencedLanguages"){
+            setProfile(nextQueryParams);
+        }
     };
 
     //受け取ったパラメータをURLに反映
@@ -55,13 +65,13 @@ function App() {
     };
 
     //オブジェクトのプロパティの値の空判定
-    const areAllPropertiesEmpty = (obj: any) => {
+    const areAllPropertiesEmpty = (obj: Profile) => {
         return Object.values(obj).every((value) => {
             return value === "";
         });
     };
 
-    const updateCheckbox = (value:string)=>{
+    const updateExperiencedLanguages = (value:string)=>{
         console.log(profile)
         //重複した値があるかどうか判定
         if(!profile.experiencedLanguages.filter((item:string)=>(item === value)).length){
@@ -71,13 +81,23 @@ function App() {
                 ...state,
                 experiencedLanguages: setValues
               }))
+              return setValues;
         }else{
             const setValues = profile.experiencedLanguages.filter((item:string) => (item !== value))
             //値を削除
-            setProfile((state:any) => ({
+            setProfile((state:Profile) => ({
                 ...state,
                 experiencedLanguages: setValues
               }))
+              return setValues;
+        }
+    }
+
+    const checkExperiencedLanguagesChecked = (value:string)=>{
+        if(!profile.experiencedLanguages.filter((item:string)=>(item === value)).length){
+            return false
+        }else{
+            return true
         }
     }
 
@@ -125,15 +145,15 @@ function App() {
                                     <label className="mb-1 block">経験が多い言語/フレームワーク</label>
                                     <div className="flex flex-wrap items-start gap-2">
                                         <div className="flex items-center gap-1">
-                                            <input type="checkbox" id="checkbox01" onChange={(e)=>{updateCheckbox(e.target.value)}} name="experiencedLanguages" value="React/Next.js"></input>
+                                            <input type="checkbox" id="checkbox01" onChange={(e)=>{handleInputChange(e)}} name="experiencedLanguages" value="React/Next.js" checked={checkExperiencedLanguagesChecked("React/Next.js")}></input>
                                             <label htmlFor="checkbox01">React/Next.js</label>
                                         </div>
                                         <div className="flex items-center gap-1">
-                                            <input type="checkbox" id="checkbox02" onChange={(e)=>{updateCheckbox(e.target.value)}} name="experiencedLanguages" value="Vue.js/Nuxt.js"></input>
+                                            <input type="checkbox" id="checkbox02" onChange={(e)=>{handleInputChange(e)}} name="experiencedLanguages" value="Vue.js/Nuxt.js" checked={checkExperiencedLanguagesChecked("Vue.js/Nuxt.js")}></input>
                                             <label htmlFor="checkbox02">Vue.js/Nuxt.js</label>
                                         </div>
                                         <div className="flex items-center gap-1">
-                                            <input type="checkbox" id="checkbox03" onChange={(e)=>{updateCheckbox(e.target.value)}} name="experiencedLanguages" value="TypeScript"></input>
+                                            <input type="checkbox" id="checkbox03" onChange={(e)=>{handleInputChange(e)}} name="experiencedLanguages" value="TypeScript" checked={checkExperiencedLanguagesChecked("TypeScript")}></input>
                                             <label htmlFor="checkbox03">TypeScript</label>
                                         </div>
                                     </div>
