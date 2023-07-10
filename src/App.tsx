@@ -15,12 +15,7 @@ function App() {
     useEffect(() => {
         getQueryParam();
     }, []);
-
-    useEffect(()=>{
-        console.log(profile)
-        console.log(checkALLEmptyProperties(profile))
-    },[profile])
-
+    
     const getQueryParam = () => {
         const urlParams = window.location.search;
         if (urlParams) {
