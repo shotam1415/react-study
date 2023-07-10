@@ -13,15 +13,15 @@ function App() {
 
     //リロード時にパラメータをStateに格納する。
     useEffect(() => {
-        getProfileParam();
+        getQueryParam();
     }, []);
 
     useEffect(()=>{
         console.log(profile)
-        console.log(areAllPropertiesEmpty(profile))
+        console.log(checkALLEmptyProperties(profile))
     },[profile])
 
-    const getProfileParam = () => {
+    const getQueryParam = () => {
         const urlParams = window.location.search;
         if (urlParams) {
             const urlQuery = new URLSearchParams(urlParams);
@@ -35,9 +35,8 @@ function App() {
                 lastName:lastName !==null ? lastName :"",
                 experiencedLanguages:experiencedLanguages?.split(',').filter(Boolean)
             }
-            
+            //stateに挿入
             setProfile(urlParam);
-
         }
     };
 
@@ -67,8 +66,8 @@ function App() {
         window.history.pushState({}, "", `/?` + urlSearchParam);
     };
 
+    //チェックボックスのState更新用メソッド
     const updateExperiencedLanguages = (value:string)=>{
-        console.log(profile)
         //重複した値があるかどうか判定
         if(!profile.experiencedLanguages.filter((item:string)=>(item === value)).length){
             const setValues = [...profile.experiencedLanguages, value]
@@ -89,6 +88,7 @@ function App() {
         }
     }
 
+    //checkされている値の判定
     const checkExperiencedLanguagesChecked = (value:string)=>{
         if(!profile.experiencedLanguages.filter((item:string)=>(item === value)).length){
             return false
@@ -98,7 +98,7 @@ function App() {
     }
 
     //オブジェクトのプロパティの値の空判定
-    const areAllPropertiesEmpty = (obj: Profile) => {
+    const checkALLEmptyProperties = (obj: Profile) => {
             const result = Object.values(obj).map((item:string) => {
                 if(item === "" || item.length === 0){
                     return true
@@ -173,7 +173,7 @@ function App() {
                         </div>
                         <div className="w-1/2">
                             <h2 className="text-center mb-4 font-bold text-xl">プレビュー画面</h2>
-                            {!areAllPropertiesEmpty(profile) &&
+                            {!checkALLEmptyProperties(profile) &&
                                 <div className="border p-10">
                                     <div className="mb-4">
                                         <p className="text-center">{profile.firstName}{profile.lastName}</p>
