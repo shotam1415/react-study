@@ -18,6 +18,7 @@ function App() {
 
     useEffect(()=>{
         console.log(profile)
+        console.log(areAllPropertiesEmpty(profile))
     },[profile])
 
     const setTextStateAction = () => {
@@ -32,7 +33,7 @@ function App() {
             const urlParam = {
                 firstName:firstName !==null ? firstName :"",
                 lastName:lastName !==null ? lastName :"",
-                experiencedLanguages:experiencedLanguages?.split(',')
+                experiencedLanguages:experiencedLanguages?.split(',').filter(Boolean)
             }
             setProfile(urlParam);
         }
@@ -64,13 +65,6 @@ function App() {
         window.history.pushState({}, "", `/?` + urlSearchParam);
     };
 
-    //オブジェクトのプロパティの値の空判定
-    const areAllPropertiesEmpty = (obj: Profile) => {
-        return Object.values(obj).every((value) => {
-            return value === "";
-        });
-    };
-
     const updateExperiencedLanguages = (value:string)=>{
         console.log(profile)
         //重複した値があるかどうか判定
@@ -100,6 +94,21 @@ function App() {
             return true
         }
     }
+
+    //オブジェクトのプロパティの値の空判定
+    const areAllPropertiesEmpty = (obj: Profile) => {
+            const result = Object.values(obj).map((item:string) => {
+                if(item === "" || item.length === 0){
+                    return true
+                }else{
+                    return false
+                }
+            })
+            return result.every((value)=>{
+                return value === true
+            })
+
+    };
 
     return (
         <main>
@@ -162,24 +171,12 @@ function App() {
                         </div>
                         <div className="w-1/2">
                             <h2 className="text-center mb-4 font-bold text-xl">プレビュー画面</h2>
-                            {!areAllPropertiesEmpty(profile) && (
+                            {!areAllPropertiesEmpty(profile) &&
                                 <div className="border p-10">
-
-                                    {/* {profile.firstName && (
-                                        <dd className="flex items-start gap-2 mb-4 last:mb-0">
-                                            <dt>姓：</dt>
-                                            <dl>{profile.firstName}</dl>
-                                        </dd>
-                                    )}
-                                    {profile.lastName && (
-                                        <dd className="flex items-start gap-2 mb-4 last:mb-0">
-                                            <dt>名：</dt>
-                                            <dl>{profile.lastName}</dl>
-                                        </dd>
-                                    )} */}
                                     <div className="mb-4">
                                         <p className="text-center">{profile.firstName}{profile.lastName}</p>
                                     </div>
+                                    {profile.experiencedLanguages.length > 0 &&
                                     <div>
                                         <p className="font-bold mb-2">経験が多い言語/フレームワーク</p>
                                         <ul className="flex items-center gap-2">
@@ -188,8 +185,9 @@ function App() {
                                             })}
                                         </ul>
                                     </div>
+                                    }
                                 </div>
-                            )}
+}
                         </div>
                     </div>
                 </div>
