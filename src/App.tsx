@@ -15,7 +15,7 @@ function App() {
     useEffect(() => {
         getQueryParam();
     }, []);
-    
+
     const getQueryParam = () => {
         const urlParams = window.location.search;
         if (urlParams) {
@@ -84,7 +84,7 @@ function App() {
     }
 
     //checkされている値の判定
-    const checkExperiencedLanguagesChecked = (value:string)=>{
+    const IsCheckedExperiencedLanguages = (value:string)=>{
         if(!profile.experiencedLanguages.filter((item:string)=>(item === value)).length){
             return false
         }else{
@@ -151,15 +151,15 @@ function App() {
                                     <label className="mb-1 block">経験が多い言語/フレームワーク</label>
                                     <div className="flex flex-wrap items-start gap-2">
                                         <div className="flex items-center gap-1">
-                                            <input type="checkbox" id="checkbox01" onChange={(e)=>{handleInputChange(e)}} name="experiencedLanguages" value="React/Next.js" checked={checkExperiencedLanguagesChecked("React/Next.js")}></input>
+                                            <input type="checkbox" id="checkbox01" onChange={(e)=>{handleInputChange(e)}} name="experiencedLanguages" value="React/Next.js" checked={IsCheckedExperiencedLanguages("React/Next.js")}></input>
                                             <label htmlFor="checkbox01">React/Next.js</label>
                                         </div>
                                         <div className="flex items-center gap-1">
-                                            <input type="checkbox" id="checkbox02" onChange={(e)=>{handleInputChange(e)}} name="experiencedLanguages" value="Vue.js/Nuxt.js" checked={checkExperiencedLanguagesChecked("Vue.js/Nuxt.js")}></input>
+                                            <input type="checkbox" id="checkbox02" onChange={(e)=>{handleInputChange(e)}} name="experiencedLanguages" value="Vue.js/Nuxt.js" checked={IsCheckedExperiencedLanguages("Vue.js/Nuxt.js")}></input>
                                             <label htmlFor="checkbox02">Vue.js/Nuxt.js</label>
                                         </div>
                                         <div className="flex items-center gap-1">
-                                            <input type="checkbox" id="checkbox03" onChange={(e)=>{handleInputChange(e)}} name="experiencedLanguages" value="TypeScript" checked={checkExperiencedLanguagesChecked("TypeScript")}></input>
+                                            <input type="checkbox" id="checkbox03" onChange={(e)=>{handleInputChange(e)}} name="experiencedLanguages" value="TypeScript" checked={IsCheckedExperiencedLanguages("TypeScript")}></input>
                                             <label htmlFor="checkbox03">TypeScript</label>
                                         </div>
                                     </div>
