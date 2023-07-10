@@ -177,8 +177,16 @@ function App() {
                                             <dl>{profile.lastName}</dl>
                                         </dd>
                                     )} */}
-                                    <div>
+                                    <div className="mb-4">
                                         <p className="text-center">{profile.firstName}{profile.lastName}</p>
+                                    </div>
+                                    <div>
+                                        <p className="font-bold mb-2">経験が多い言語/フレームワーク</p>
+                                        <ul className="flex items-center gap-2">
+                                            {profile.experiencedLanguages.map((item:string,index:number)=>{
+                                                return <li key={index}>{item}</li>
+                                            })}
+                                        </ul>
                                     </div>
                                 </div>
                             )}
