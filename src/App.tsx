@@ -13,7 +13,7 @@ function App() {
 
     //リロード時にパラメータをStateに格納する。
     useEffect(() => {
-        setTextStateAction();
+        getProfileParam();
     }, []);
 
     useEffect(()=>{
@@ -21,7 +21,7 @@ function App() {
         console.log(areAllPropertiesEmpty(profile))
     },[profile])
 
-    const setTextStateAction = () => {
+    const getProfileParam = () => {
         const urlParams = window.location.search;
         if (urlParams) {
             const urlQuery = new URLSearchParams(urlParams);
@@ -35,7 +35,9 @@ function App() {
                 lastName:lastName !==null ? lastName :"",
                 experiencedLanguages:experiencedLanguages?.split(',').filter(Boolean)
             }
+            
             setProfile(urlParam);
+
         }
     };
 
