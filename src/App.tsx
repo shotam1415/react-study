@@ -1,12 +1,14 @@
 import "./App.css";
 import { useState, useEffect } from "react";
 import { Profile } from "./type";
+import { format } from 'date-fns'
 
 function App() {
     const profileInitialData: Profile = {
         firstName: "",
         lastName: "",
-        experiencedLanguages:[]
+        experiencedLanguages:[],
+        hireDate:""
     };
     //入力内容の状態管理
     const [profile, setProfile] = useState<Profile>(profileInitialData);
@@ -24,11 +26,13 @@ function App() {
             const firstName = urlQuery.get('firstName') ? urlQuery.get('firstName'):"";
             const lastName = urlQuery.get('lastName')? urlQuery.get('lastName'):"";
             const experiencedLanguages = urlQuery.get('experiencedLanguages') ?  urlQuery.get('experiencedLanguages'):"";
+            const hireDate = urlQuery.get('hireDate') ?  urlQuery.get('hireDate'):"";
 
             const urlParam = {
                 firstName:firstName !==null ? firstName :"",
                 lastName:lastName !==null ? lastName :"",
-                experiencedLanguages:experiencedLanguages?.split(',').filter(Boolean)
+                experiencedLanguages:experiencedLanguages?.split(',').filter(Boolean),
+                hireDate:hireDate !==null ? hireDate :"",
             }
             //stateに挿入
             setProfile(urlParam);
@@ -44,7 +48,8 @@ function App() {
         const nextQueryParams = {
                 firstName: targetInputName === "firstName" ? targetInputValue: profile.firstName,
                 lastName: targetInputName === "lastName" ? targetInputValue : profile.lastName,
-                experiencedLanguages: targetInputName === "experiencedLanguages" ? updateExperiencedLanguages(targetInputValue): profile.experiencedLanguages
+                experiencedLanguages: targetInputName === "experiencedLanguages" ? updateExperiencedLanguages(targetInputValue): profile.experiencedLanguages,
+                hireDate:targetInputName === "hireDate"?format(new Date(targetInputValue), 'yyyy年M月d日'):profile.hireDate
         };
         //クエリにデータを格納
         changeQueryParam(nextQueryParams);
@@ -147,7 +152,7 @@ function App() {
                                         </div>
                                     </div>
                                 </div>
-                                <div>
+                                <div className="mb-4">
                                     <label className="mb-1 block">経験が多い言語/フレームワーク</label>
                                     <div className="flex flex-wrap items-start gap-2">
                                         <div className="flex items-center gap-1">
@@ -164,6 +169,10 @@ function App() {
                                         </div>
                                     </div>
                                 </div>
+                                <div>
+                                    <label className="block mb-1">入社日</label>
+                                    <input className="border w-1/2" type="date" name="hireDate" onChange={(e)=>{handleInputChange(e)}}/>
+                                </div>
                             </div>
                         </div>
                         <div className="w-1/2">
@@ -174,13 +183,19 @@ function App() {
                                         <p className="text-center">{profile.firstName}{profile.lastName}</p>
                                     </div>
                                     {profile.experiencedLanguages.length > 0 &&
-                                    <div>
+                                    <div className="mb-4">
                                         <p className="font-bold mb-2">経験が多い言語/フレームワーク</p>
                                         <ul className="flex items-center gap-2">
                                             {profile.experiencedLanguages.map((item:string,index:number)=>{
                                                 return <li key={index}>{item}</li>
                                             })}
                                         </ul>
+                                    </div>
+                                    }
+                                    {profile.hireDate &&
+                                    <div>
+                                        <p className="font-bold mb-2">入社日</p>
+                                        <p>{profile.hireDate}</p>
                                     </div>
                                     }
                                 </div>
