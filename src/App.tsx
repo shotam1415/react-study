@@ -147,7 +147,7 @@ function App() {
                                         </div>
                                     </div>
                                 </div>
-                                <div>
+                                <div className="mb-4">
                                     <label className="mb-1 block">経験が多い言語/フレームワーク</label>
                                     <div className="flex flex-wrap items-start gap-2">
                                         <div className="flex items-center gap-1">
@@ -163,6 +163,10 @@ function App() {
                                             <label htmlFor="checkbox03">TypeScript</label>
                                         </div>
                                     </div>
+                                </div>
+                                <div>
+                                    <label className="block mb-1">入社日</label>
+                                    <input className="border w-1/2" type="date"/>
                                 </div>
                             </div>
                         </div>
