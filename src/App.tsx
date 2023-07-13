@@ -19,24 +19,21 @@ function App() {
     }, []);
 
     const getQueryParam = () => {
-        const urlParams = window.location.search;
-        if (urlParams) {
-            const urlQuery = new URLSearchParams(urlParams);
+        const searchParams = new URLSearchParams(window.location.search);
             
-            const firstName = urlQuery.get('firstName') ? urlQuery.get('firstName'):"";
-            const lastName = urlQuery.get('lastName')? urlQuery.get('lastName'):"";
-            const experiencedLanguages = urlQuery.get('experiencedLanguages') ?  urlQuery.get('experiencedLanguages'):"";
-            const hireDate = urlQuery.get('hireDate') ?  urlQuery.get('hireDate'):"";
+        const firstName = searchParams.get('firstName') ?? "";
+        const lastName = searchParams.get('lastName') ?? "";
+        const experiencedLanguages = searchParams.get('experiencedLanguages')?.split(',').filter(Boolean) ?? [];
+        const hireDate = searchParams.get('hireDate') ?? "";
 
-            const urlParam = {
-                firstName:firstName !==null ? firstName :"",
-                lastName:lastName !==null ? lastName :"",
-                experiencedLanguages:experiencedLanguages?.split(',').filter(Boolean),
-                hireDate:hireDate !==null ? hireDate :"",
-            }
-            //stateに挿入
-            setProfile(urlParam);
+        const profileObject = {
+            firstName:firstName,
+            lastName:lastName,
+            experiencedLanguages:experiencedLanguages,
+            hireDate:hireDate,
         }
+        
+        setProfile(profileObject);
     };
 
     //URLパラメータとuseStateの更新
