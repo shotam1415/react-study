@@ -55,9 +55,7 @@ function App() {
         changeQueryParam(nextQueryParams);
 
         //setStateを更新
-        if(targetInputName !== "experiencedLanguages"){
-            setProfile(nextQueryParams);
-        }
+        setProfile(nextQueryParams);
     };
 
     //受け取ったパラメータをURLに反映
@@ -70,21 +68,11 @@ function App() {
     const updateExperiencedLanguages = (value:string)=>{
         //重複した値があるかどうか判定
         if(!profile.experiencedLanguages.filter((item:string)=>(item === value)).length){
-            const setValues = [...profile.experiencedLanguages, value]
-            //値を追加
-            setProfile((state:any) => ({
-                ...state,
-                experiencedLanguages: setValues
-              }))
-              return setValues;
+            const newValues = [...profile.experiencedLanguages, value]
+            return newValues;
         }else{
-            const setValues = profile.experiencedLanguages.filter((item:string) => (item !== value))
-            //値を削除
-            setProfile((state:Profile) => ({
-                ...state,
-                experiencedLanguages: setValues
-              }))
-              return setValues;
+            const newValues = profile.experiencedLanguages.filter((item:string) => (item !== value))
+            return newValues;
         }
     }
 
