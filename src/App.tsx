@@ -19,24 +19,21 @@ function App() {
     }, []);
 
     const getQueryParam = () => {
-        const urlParams = window.location.search;
-        if (urlParams) {
-            const urlQuery = new URLSearchParams(urlParams);
+        const searchParams = new URLSearchParams(window.location.search);
             
-            const firstName = urlQuery.get('firstName') ? urlQuery.get('firstName'):"";
-            const lastName = urlQuery.get('lastName')? urlQuery.get('lastName'):"";
-            const experiencedLanguages = urlQuery.get('experiencedLanguages') ?  urlQuery.get('experiencedLanguages'):"";
-            const hireDate = urlQuery.get('hireDate') ?  urlQuery.get('hireDate'):"";
+        const firstName = searchParams.get('firstName') ?? "";
+        const lastName = searchParams.get('lastName') ?? "";
+        const experiencedLanguages = searchParams.get('experiencedLanguages')?.split(',').filter(Boolean) ?? [];
+        const hireDate = searchParams.get('hireDate') ?? "";
 
-            const urlParam = {
-                firstName:firstName !==null ? firstName :"",
-                lastName:lastName !==null ? lastName :"",
-                experiencedLanguages:experiencedLanguages?.split(',').filter(Boolean),
-                hireDate:hireDate !==null ? hireDate :"",
-            }
-            //stateに挿入
-            setProfile(urlParam);
+        const profileObject = {
+            firstName:firstName,
+            lastName:lastName,
+            experiencedLanguages:experiencedLanguages,
+            hireDate:hireDate,
         }
+        
+        setProfile(profileObject);
     };
 
     //URLパラメータとuseStateの更新
@@ -55,9 +52,7 @@ function App() {
         changeQueryParam(nextQueryParams);
 
         //setStateを更新
-        if(targetInputName !== "experiencedLanguages"){
-            setProfile(nextQueryParams);
-        }
+        setProfile(nextQueryParams);
     };
 
     //受け取ったパラメータをURLに反映
@@ -70,43 +65,35 @@ function App() {
     const updateExperiencedLanguages = (value:string)=>{
         //重複した値があるかどうか判定
         if(!profile.experiencedLanguages.filter((item:string)=>(item === value)).length){
-            const setValues = [...profile.experiencedLanguages, value]
-            //値を追加
-            setProfile((state:any) => ({
-                ...state,
-                experiencedLanguages: setValues
-              }))
-              return setValues;
+            const newValues = [...profile.experiencedLanguages, value]
+            return newValues;
         }else{
-            const setValues = profile.experiencedLanguages.filter((item:string) => (item !== value))
-            //値を削除
-            setProfile((state:Profile) => ({
-                ...state,
-                experiencedLanguages: setValues
-              }))
-              return setValues;
+            const newValues = profile.experiencedLanguages.filter((item:string) => (item !== value))
+            return newValues;
         }
     }
 
     //checkされている値の判定
     const IsCheckedExperiencedLanguages = (value:string)=>{
-        if(!profile.experiencedLanguages.filter((item:string)=>(item === value)).length){
-            return false
-        }else{
-            return true
-        }
+        return profile.experiencedLanguages.includes(value);
     }
 
     //オブジェクトのプロパティの値の空判定
     const checkALLEmptyProperties = (obj: Profile) => {
-            const result = Object.values(obj).map((item:string) => {
-                if(item === "" || item.length === 0){
-                    return true
-                }else{
+            
+            const emptyInfoArray = Object.values(obj).map((item:string) => {
+                if(item !== ""){
                     return false
                 }
+                if(item.length !== 0){
+                    return false
+                }
+                else{
+                    return true
+                }
             })
-            return result.every((value)=>{
+            
+            return emptyInfoArray.every((value)=>{
                 return value === true
             })
 
