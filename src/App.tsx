@@ -90,11 +90,7 @@ function App() {
 
     //checkされている値の判定
     const IsCheckedExperiencedLanguages = (value:string)=>{
-        if(!profile.experiencedLanguages.filter((item:string)=>(item === value)).length){
-            return false
-        }else{
-            return true
-        }
+        return profile.experiencedLanguages.includes(value);
     }
 
     //オブジェクトのプロパティの値の空判定
