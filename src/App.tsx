@@ -4,12 +4,14 @@ import { Profile } from "./type";
 import { format } from 'date-fns'
 
 function App() {
+
     const profileInitialData: Profile = {
         firstName: "",
         lastName: "",
         experiencedLanguages:[],
         hireDate:""
     };
+
     //入力内容の状態管理
     const [profile, setProfile] = useState<Profile>(profileInitialData);
 
@@ -18,6 +20,7 @@ function App() {
         getQueryParam();
     }, []);
 
+    // パラメータをStateに格納する。
     const getQueryParam = () => {
         const searchParams = new URLSearchParams(window.location.search);
             
@@ -80,23 +83,10 @@ function App() {
 
     //オブジェクトのプロパティの値の空判定
     const checkALLEmptyProperties = (obj: Profile) => {
-            
-            const emptyInfoArray = Object.values(obj).map((item:string) => {
-                if(item !== ""){
-                    return false
-                }
-                if(item.length !== 0){
-                    return false
-                }
-                else{
-                    return true
-                }
-            })
-            
-            return emptyInfoArray.every((value)=>{
-                return value === true
-            })
-
+        const objValues = Object.values(obj);
+        // 空文字か空配列か判定
+        const isEmpty = objValues.every(value => value === "" || Array.isArray(value) && value.length === 0);
+        return isEmpty
     };
 
     return (
