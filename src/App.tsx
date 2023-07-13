@@ -99,14 +99,20 @@ function App() {
 
     //オブジェクトのプロパティの値の空判定
     const checkALLEmptyProperties = (obj: Profile) => {
-            const result = Object.values(obj).map((item:string) => {
-                if(item === "" || item.length === 0){
-                    return true
-                }else{
+            
+            const emptyInfoArray = Object.values(obj).map((item:string) => {
+                if(item !== ""){
                     return false
                 }
+                if(item.length !== 0){
+                    return false
+                }
+                else{
+                    return true
+                }
             })
-            return result.every((value)=>{
+            
+            return emptyInfoArray.every((value)=>{
                 return value === true
             })
 
